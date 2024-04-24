@@ -1,0 +1,47 @@
+# ASP.NET Core
+*.obj
+*.dll
+*.exe
+*.pdb
+*.log
+*.vscode/
+*.vs/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio code auto generated files
+.vscode/
+
+# Node.js
+node_modules/
+
+# React
+/build/
+/.env
+.DS_Store
+
+# Mac specific
+.DS_Store
+
+# Dependency directories
+/jspm_packages/
+/bower_components/
+/bower.json
+
+# TypeScript
+*.tsbuildinfo
+
+# End of generated files from https://www.gitignore.io/api/dotnetcore,visualstudiocode,node
