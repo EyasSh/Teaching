@@ -1,9 +1,10 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Entities;
 using System.ComponentModel.DataAnnotations;
 namespace Server.Models
 {
-    public class User
+    public class User:Entity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

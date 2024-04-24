@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Server.Models;
 namespace Server.Mongo
 {
     ///<summary> 
@@ -9,16 +10,19 @@ namespace Server.Mongo
     public class MongoDBWrapper
     {
         private readonly IMongoDatabase _db;
+        public IMongoCollection<User> Users { get; private set; }
+        public IMongoCollection<Courses> Courses { get; private set; }
         public MongoDBWrapper(IConfiguration configuration) 
         {
             var connectionString = configuration.GetConnectionString("MongoDBConnection");
             var dbName = configuration["DatabaseName"];
 
             var client = new MongoClient(connectionString);
-            var db = client.GetDatabase(dbName);
+             _db = client.GetDatabase(dbName);
             //initialize collections here
             //Example
-            // Collection1 = new MongoDbSet<YourDocumentModel1>(_db, "Collection1Name");
+            Users = _db.GetCollection<User>("Users");
+            Courses = _db.GetCollection<Courses>("Courses");
             //end collection init
         }
     }
