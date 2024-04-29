@@ -1,34 +1,28 @@
-using MongoDB.Driver;
-using Server.Mongo;
+using Server.Models;
+using Server.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.Configure<DBSettings>(
+    builder.Configuration.GetSection("TeachingDatabase")
+    ) ;
+builder.Services.AddSingleton<UserService>();
+//add the courses singleton here too
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<MongoDBWrapper>();
-
 var app = builder.Build();
-
-app.UseCors(options =>
-{
-    options.AllowAnyOrigin();
-    options.AllowAnyMethod();
-    options.AllowAnyHeader();
-});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
-    app.UseAuthorization();
-    app.MapControllers();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
