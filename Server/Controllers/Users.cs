@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers
 {
-    [ApiController]
-    [Route("api/users")]
+
     //Summary:
     //  some of the problems encountered
     //  inherit from controllerbase not controller and return HTTP responses
     //  set routes correctly as well
     //
+    [ApiController]
+    [Route("api/users")]
     public class Users : ControllerBase
     {
         private readonly UserService _userService;
@@ -20,7 +21,7 @@ namespace Server.Controllers
         {
             _userService = userService;
         }
-        [Route("/")]
+        
         [HttpGet]
         // GET: Users
         public async  Task<IActionResult> Index()
@@ -28,8 +29,8 @@ namespace Server.Controllers
             //await db or other method calls here
             return Ok();
         }
-        [Route("/Home")]
-        [HttpGet]
+        
+        [HttpGet("Home")]
         // GET: Users/Details/5
         public ActionResult Details(int id)
         {
@@ -37,8 +38,8 @@ namespace Server.Controllers
         }
 
         // GET: Users/Create
-        [Route("/signup")]
-        [HttpPost]
+        
+        [HttpPost("signup")]
         [AllowAnonymous]
         public async Task<IActionResult> Create(User user)
         {
@@ -50,8 +51,8 @@ namespace Server.Controllers
         }
 
         // POST: Users/Create
-        [Route("/signupForm")]
-        [HttpPost]
+       
+        [HttpPost("signupForm")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
@@ -64,8 +65,8 @@ namespace Server.Controllers
                 return BadRequest();
             }
         }
-        [Route("editUser/{id}")]
-        [HttpPut]
+        
+        [HttpPut("editUser")]
         // GET: Users/Edit/5
         public ActionResult Edit(int id)
         {
@@ -73,8 +74,8 @@ namespace Server.Controllers
         }
 
         // POST: Users/Edit/5
-        [Route("editForm")]
-        [HttpPost]
+      
+        [HttpPost("editForm")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
