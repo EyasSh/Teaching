@@ -7,19 +7,21 @@ using Microsoft.AspNetCore.Authorization;
 namespace Server.Controllers
 {
 
-    //Summary:
-    //  some of the problems encountered
-    //  inherit from controllerbase not controller and return HTTP responses
-    //  set routes correctly as well
-    //
+    /// <summary>
+    /// some of the problems encountered
+    ///  inherit from controllerbase not controller and return HTTP responses
+    ///  set routes correctly as well
+    /// </summary>
     [ApiController]
     [Route("api/users")]
     public class Users : ControllerBase
     {
         private readonly UserService _userService;
-        public Users(UserService userService)
+        private readonly CourseService _courseService;
+        public Users(UserService userService,CourseService courseService)
         {
             _userService = userService;
+            _courseService = courseService;
         }
         
         [HttpGet]

@@ -10,6 +10,7 @@ builder.Services.Configure<DBSettings>(
     builder.Configuration.GetSection("TeachingDatabase")
     ) ;
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<CourseService>();
 //add the courses singleton here too
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

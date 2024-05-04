@@ -9,10 +9,14 @@ namespace Server.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+        
         [BsonElement("name")]
-        public required string courseName { get; set; }
-        public required string Description { get; set; }
-        public required double Price {  get; set; }
+        [Required]
+        public string courseName { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Required]
+        public double Price {  get; set; }
         
     }
 }
