@@ -3,6 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Services;
 using Server.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Server.Controllers
 {
@@ -18,23 +24,33 @@ namespace Server.Controllers
     {
         private readonly UserService _userService;
         private readonly CourseService _courseService;
-        public Users(UserService userService,CourseService courseService)
+        private readonly IConfiguration _configuration;
+        public Users(UserService userService,CourseService courseService, IConfiguration configuration)
         {
             _userService = userService;
             _courseService = courseService;
+            _configuration = configuration;
         }
         
         [HttpGet]
         // GET: Users
-        public async  Task<IActionResult> Index()
+        public async  Task<IActionResult> Login([Bind("Id,Email,Password")] User u)
         {
             //await db or other method calls here
-            return Ok();
+           User res =   await _userService.GetUserByEmailandPass(u.Email,u.Password);
+            if (res!=null)
+            {
+                var token = GenerateJwtToken(res);
+                return Ok(new{ user=res,token=token});
+            }
+            return BadRequest();
+            
         }
+
         
         [HttpGet("Home")]
         // GET: Users/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             return Ok();
         }
@@ -45,11 +61,11 @@ namespace Server.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Create(User user)
         {
-            var isCreated = await _userService.CreateUser(user.Name,user.Email,user.Password); 
-            if(isCreated)
-                return Ok(user);
-            else
+            var isAlreadyCreated = await _userService.CreateUser(user.Name,user.Email,user.Password); 
+            if(isAlreadyCreated)
                 return BadRequest();
+            else
+               return Ok(user);
         }
 
         // POST: Users/Create
@@ -90,7 +106,26 @@ namespace Server.Controllers
                 return BadRequest();
             }
         }
+        private string GenerateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]);
 
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    // Add more claims if needed
+                }),
+                Expires = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["JwtSettings:ExpirationDays"])),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
         //// GET: Users/Delete/5
         //public ActionResult Delete(int id)
         //{
