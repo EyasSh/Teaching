@@ -1,0 +1,10 @@
+.login-container{
+    background-color: #282c34;
+   
+   margin: 25% 25%;
+}
+.login-wrapper{
+    display: flex;
+    flex-direction: column;
+    
+}
