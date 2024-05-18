@@ -1,0 +1,23 @@
+input{
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 8px;
+  box-sizing: border-box; /* Ensures padding is included in the width and height */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #4b5162;
+  font-family: 'Montserrat';
+  margin-bottom: 3%;
+  width: 50%;
+}
+
+input:focus {
+  color: white;
+  outline: none;
+  border-color: #4b5162; /* A lighter shade of #282c34 */
+  box-shadow: 0 0 10px rgba(75, 81, 98, 0.6); /* Increased shadow size */
+}
+input::placeholder
+{
+  color:#8a92a3 ;
+  font-family: 'Montserrat'
+}

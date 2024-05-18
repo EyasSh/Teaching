@@ -2,92 +2,20 @@
   font-family: 'Montserrat';  
   src:url('../../assets/Fonts/Montserrat-VariableFont_wght.ttf');
 }
- 
-
 .container{
-   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
-   min-height: 50%;
-   min-width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 5%;
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 50%;
+  min-width: 30%;
   margin-top: 15%;
   position: absolute;
   right: 25%;
   left: 25%;
   color: white;
-  
-}
-.login-wrapper{
-    display: flex;
-    flex-direction: column;
-    gap: 1vh;
-    margin-right: 25%;
-    margin-left: 25%;
-   
-}
-.login-wrapper h2{
-  align-self: center;
-  background-image: linear-gradient(125deg, #66afe9, #804fff); /* Apply gradient */
-  clip-text: ellipsis; /* Clip overflowing text if needed */
-  -webkit-background-clip: text; /* Apply gradient to text (WebKit browsers) */
-  background-clip: text; /* Apply gradient to text (other browsers) */
-  color: transparent; /* Make text invisible (text content remains) */
-}
-.rotating-arrow{
-  animation: rotate 2s infinite linear;
-  height: fit-content;
-  width: fit-content;
-  align-self: center;
-  justify-self: center;
-}
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-input[type="text"],
-input[type="password"] {
-  border: 1px solid transparent;
-  border-radius: 5px;
-  padding: 8px;
-  box-sizing: border-box; /* Ensures padding is included in the width and height */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  background-color: #4b5162;
-  font-family: 'Montserrat';
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-  color: white;
-  outline: none;
-  border-color: #4b5162; /* A lighter shade of #282c34 */
-  box-shadow: 0 0 10px rgba(75, 81, 98, 0.6); /* Increased shadow size */
-}
-input[type="text"]::placeholder,
-input[type="password"]::placeholder
-{
-  color:#8a92a3 ;
-  font-family: 'Montserrat'
-}
-button[type="submit"]{
-  width:50%;
-  align-self: center;
-  border-radius: 5px;
-  outline: none;
-  color: white;
-  border: 1px solid transparent;
-  background-color: #66acea;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 5%;
-  padding: 5px;
-  font-family: 'Montserrat';
-}
-button[type="submit"]:hover{
-  cursor: pointer;
-  border-color: #66afe9; /* Change border color on focus */
-  box-shadow: 0 0 5px rgba(102, 175, 233, 0.6); /* Adds a subtle shadow */
-  
+  align-items: center;
+  justify-items: center;
 }
 label{
   font-family: 'Montserrat';
