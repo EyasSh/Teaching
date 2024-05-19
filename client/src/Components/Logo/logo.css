@@ -6,6 +6,7 @@
 
 .logo-container.row {
     flex-direction: row;
+    margin-bottom: 0;
 }
 
 .logo-container.column {

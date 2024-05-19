@@ -1,0 +1,18 @@
+.bar{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    border-color: #4b5162; /* A lighter shade of #282c34 */
+    box-shadow: 0 0 10px rgba(75, 81, 98, 0.6); /* Increased shadow size */
+    position: sticky;
+    justify-content: flex-start;
+    height: min-content;
+    gap:30%;
+}
+  
+span {
+   align-self: center;
+   margin: 0;
+   padding: 0;
+}
+  
