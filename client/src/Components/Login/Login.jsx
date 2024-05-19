@@ -10,7 +10,11 @@ function Login(props) {
            <Logo  flex='column'/>
            <Input type='email' placeholder='Email'></Input>
            <Input type='password' placeholder='Password'></Input>
-           <Button status='action' content='Login'  />
+           <Button status='action' content='Login' action={()=>alert("Login")}  />
+           <div className='sup'>
+            <span>Don't have an account?</span>
+            <Button link='/signup' status='signup' content="Sign Up"  /> 
+           </div>
             
         </div>
     );

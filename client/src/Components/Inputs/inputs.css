@@ -8,8 +8,8 @@ input{
   font-family: 'Montserrat';
   margin-bottom: 3%;
   width: 50%;
+  color: white;
 }
-
 input:focus {
   color: white;
   outline: none;

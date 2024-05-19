@@ -17,6 +17,16 @@
   align-items: center;
   justify-items: center;
 }
+.sup{
+  display: flex;
+  flex-direction: row;
+  gap: 2%;
+  margin-top: 3%;
+  align-items: center; /* Centers items vertically within the flex container */
+  justify-content: center; /* Centers items horizontally within the flex container */
+  width: 100%;
+  text-align: center;
+}
 label{
   font-family: 'Montserrat';
 }

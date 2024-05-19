@@ -1,22 +1,26 @@
 import React from 'react';
 import './button.css';
+import { Link } from 'react-router-dom';
 
 function Button(props) {
     const statusClass = statusHandler(props.status);
+    const buttonContent = props.content.toString();
     
-    return (
-        <>
-            {statusClass !== '' ? (
-                <button className={statusClass}>
-                    {props.content.toString()}
+    if (props.link) {
+        return (
+            <Link to={props.link}>
+                <button className={statusClass || "default-class"}>
+                    {buttonContent}
                 </button>
-            ) : (
-                <button className="default-class">
-                    {props.content.toString()}
-                </button>
-            )}
-        </>
-    );
+            </Link>
+        );
+    } else {
+        return (
+            <button className={statusClass || "default-class"} onClick={props.action}>
+                {buttonContent}
+            </button>
+        );
+    }
 }
 
 function statusHandler(status) {
