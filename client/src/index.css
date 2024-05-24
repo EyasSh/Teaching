@@ -5,10 +5,12 @@
 body {
   margin: 0;
   font-family:'Montserrat';
-    color: white;
+  color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #282c34;
+  letter-spacing: 1px;
+  user-select: none;
 }
 
 code {

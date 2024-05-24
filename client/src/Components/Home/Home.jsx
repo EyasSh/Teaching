@@ -1,6 +1,8 @@
 import React from 'react';
 import './home.css'
 import Logo from '../Logo/Logo';
+import CourseCard from '../Courses/Course';
+import IMG from "../../assets/Images/Fail.jpg"
 
 function Home(props) {
     return (
@@ -11,6 +13,7 @@ function Home(props) {
                 Hello Profile owner name
             </span>
            </nav>
+           <CourseCard image={IMG}></CourseCard>
         </>
     );
 }
