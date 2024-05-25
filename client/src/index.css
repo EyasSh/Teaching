@@ -2,6 +2,14 @@
   font-family: 'Montserrat';  
   src:url('./assets/Fonts/Montserrat-VariableFont_wght.ttf');
 }
+
+  
+
+html{
+  scrollbar-color: #5b6172 transparent ;
+  scrollbar-width: thin;
+}
+
 body {
   margin: 0;
   font-family:'Montserrat';
@@ -11,6 +19,7 @@ body {
   background-color: #282c34;
   letter-spacing: 1px;
   user-select: none;
+  
 }
 
 code {

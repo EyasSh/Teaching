@@ -32,4 +32,9 @@
     width: 100%;
     margin-top: auto;
   }
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 15%;
+}
   
