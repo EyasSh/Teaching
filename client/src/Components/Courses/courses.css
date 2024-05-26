@@ -1,40 +1,41 @@
 .cont {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #4b5162;
+    background-color: #161a22;
     padding: 10px;
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    max-width: 300px; /* Adjust the maximum width as needed */
+    width: 20rem;
+    max-width: 500vw; /* Adjust the maximum width as needed */
     margin-left: 2%;
     margin-top: 2%;
-  }
+}
   
-  .responsive-image {
+.responsive-image {
     width: 100%;
     max-height: 200px; /* Limit the maximum height of the image */
     object-fit: cover; /* Ensure the image covers the entire container */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-  }
+}
   
-  .cont h3 {
+.cont h3 {
+    align-self: baseline;
+    text-align: left;
     margin: 10px 0;
-  }
+}
   
-  .cont section {
+.cont section {
     margin-bottom: 10px;
-    text-align: center;
-  }
+}
   
-  .but {
-    width: 100%;
-    margin-top: auto;
-  }
-  .buttons{
-    display: flex;
-    flex-direction: row;
-    gap: 15%;
+.but {
+  justify-content: flex-start ;
+ 
+}
+.button{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; 
+  margin-bottom: 0.5rem;
+  gap: 15%;
 }
   

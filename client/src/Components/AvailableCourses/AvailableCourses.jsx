@@ -36,13 +36,14 @@ function Purchased(props) {
       />
       <h3>Xamarin</h3>
       <section>An extensive MAUI Course in C#</section>
+      <div className='button'>
+        <Button
+          content="View Course"
+          link="http://localhost:3000/signup"
+          status='action'
+        />
+      </div>
       
-      <Button
-        className="but"
-        content="View Course"
-        link="http://localhost:3000/signup"
-        status='action'
-      />
       
       
     </div>

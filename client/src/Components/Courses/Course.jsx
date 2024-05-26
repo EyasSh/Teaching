@@ -37,7 +37,7 @@ function CourseCard(props) {
       />
       <h3>Xamarin</h3>
       <section>An extensive MAUI Course in C#</section>
-      <div className='buttons'>
+      <div className='button'>
       <Button
         className="but"
         content="Preview Course"
