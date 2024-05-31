@@ -18,14 +18,17 @@ namespace Server.Models
         [RegularExpression(@"^(?=.*\d)(?=.*[a-zA-Z]).{8,}$",
         ErrorMessage = "Password must be at least 8 characters and contain at least one letter and one number")]
         public  string Password { get; set; } = "LobsterBeef997";
+        [Required]
+        public DateOnly Birthday{ get; set; }
         public User()
         {
         }
-        public User(string name, string email, string password)
+        public User(string name, string email, string password, DateOnly birthday)
         {
             Name = name;
             Email = email;  
             Password = password;
+            Birthday = birthday;
         }
     }
 }

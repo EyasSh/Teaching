@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MongoDB.Bson;
 
 namespace Server.Controllers
 {
@@ -50,7 +51,7 @@ namespace Server.Controllers
         
         [HttpGet("Home")]
         // GET: Users/Details/5
-        public IActionResult Details(int id)
+        public IActionResult Home(ObjectId id)
         {
             return Ok();
         }
@@ -59,13 +60,14 @@ namespace Server.Controllers
         
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create([Bind("Id,Name,Email,Password,Birthday")]User user)
         {
-            var isAlreadyCreated = await _userService.CreateUser(user.Name,user.Email,user.Password); 
-            if(isAlreadyCreated)
-                return BadRequest();
-            else
-               return Ok(user);
+            var res = await _userService.CreateUser(user); 
+            if(res)
+            {
+                return Ok();
+            }
+            return Conflict();
         }
 
         // POST: Users/Create
@@ -99,7 +101,7 @@ namespace Server.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
             catch
             {

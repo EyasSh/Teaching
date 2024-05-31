@@ -2,6 +2,7 @@
 using Server.Models;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace Server.Services
@@ -9,7 +10,7 @@ namespace Server.Services
     interface IUserService
     {
         Task<User> GetUserByEmailandPass(string email,string password);
-        Task<bool> CreateUser(string name, string email, string password);
+        Task<bool> CreateUser(User u);
     }
     public class UserService: IUserService
     {
@@ -34,22 +35,21 @@ namespace Server.Services
             
 
         }
-        public async Task<bool> CreateUser(string name, string email, string password)
+       
+        public async Task<bool> CreateUser(User u)
         {
-            bool isCreated = false;
-            var res= await GetUserByEmailandPass(email, password);
-            if (res!=null)
+            
+            var res= await GetUserByEmailandPass(u.Email, u.Password);
+            bool newUserCreated = res==null;
+            if (res == null)
             {
-                return isCreated;
-            }
-            else
-            {
-                password= HashPassword(password);
-                User user = new User(name,email,password);
+                u.Password = HashPassword(u.Password);
+                User user = new User(u.Name, u.Email, u.Password,u.Birthday);
                 _usersCollection.InsertOne(user);
-                isCreated = true;
-                return isCreated;
+                
             }
+            return newUserCreated;
+
         }
         public string HashPassword(string password)
         {
