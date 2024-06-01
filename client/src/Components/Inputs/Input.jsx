@@ -8,6 +8,10 @@ function Input(props) {
         "file", "range", "button", "reset", "submit", "image", "hidden"
     ];
     const handleChange=(e) => {
+        if(props.type=='date'){
+            props.action(new Date(e.target.value))
+            return
+        }
         props.action(e.target.value);
         
     }

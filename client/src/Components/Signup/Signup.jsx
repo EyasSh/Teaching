@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './signup.css'
 import Logo from '../Logo/Logo';
 import Input from '../Inputs/Input';
 import Button from '../Button/Button';
 
 function Signup(props) {
+    const [dob,setDob] = useState(null)
     return (
         <div className='container'>
             <Logo flex="column"/>
@@ -15,8 +16,8 @@ function Signup(props) {
             
             <Input type='password' placeholder='Password'  />
             
-            <Input type='date' placeholder='dd/mm/yyyy' />
-            <Button  status='signup' content="Sign Up" action={()=>alert("Signup")} /> 
+            <Input type='date' placeholder='dd/mm/yyyy' action={setDob} />
+            <Button  status='signup' content="Sign Up" action={()=>alert(dob)} /> 
         </div>
     );
 }
