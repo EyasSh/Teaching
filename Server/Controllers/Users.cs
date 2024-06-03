@@ -42,9 +42,9 @@ namespace Server.Controllers
             if (res!=null)
             {
                 var token = GenerateJwtToken(res);
-                return Ok(new{ user=res,token=token});
+                return Ok(new{token});
             }
-            return BadRequest();
+            return NotFound();
             
         }
 
@@ -117,8 +117,10 @@ namespace Server.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    
                     // Add more claims if needed
                 }),
                 Expires = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["JwtSettings:ExpirationDays"])),
