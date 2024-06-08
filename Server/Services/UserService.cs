@@ -9,7 +9,7 @@ namespace Server.Services
 {
     interface IUserService
     {
-        Task<User> GetUserByEmailandPass(string email,string password);
+        Task<User> GetUserByEmail(string email);
         Task<bool> CreateUser(User u);
     }
     public class UserService: IUserService
@@ -22,34 +22,29 @@ namespace Server.Services
             var Database = userClient.GetDatabase(settings.Value.DatabaseName);
             _usersCollection = Database.GetCollection<User>(settings.Value.UsersCollectionName);
         }
-        public async Task<User> GetUserByEmailandPass(string email, string password)
+        public async Task<User> GetUserByEmail(string email)
         {
             //use appropriate checks for password and email validation
-            var filter = Builders<User>.Filter.And(
-                Builders<User>.Filter.Eq(u => u.Email, email),
-                Builders<User>.Filter.Eq(u => u.Password, HashPassword(password)) // Hash password
-                   );
-
-            // Find the first user matching the filter
+           var filter = Builders<User>.Filter.Eq(u => u.Email, email);
             return await _usersCollection.Find(filter).FirstOrDefaultAsync();
-            
-
         }
        
         public async Task<bool> CreateUser(User u)
         {
             
-            var res= await GetUserByEmailandPass(u.Email, u.Password);
-            bool newUserCreated = res==null;
-            if (res == null)
+            // Check if a user with the same email already exists
+             var existingUser = await GetUserByEmail(u.Email);
+    
+             // If an existing user with the same email is found, return false
+            if (existingUser != null)
             {
-                u.Password = HashPassword(u.Password);
-                User user = new User(u.Name, u.Email, u.Password,u.Birthday);
-                _usersCollection.InsertOne(user);
-                
+                return false;
             }
-            return newUserCreated;
 
+            // If no existing user is found, proceed to create the new user
+            u.Password = HashPassword(u.Password);
+            _usersCollection.InsertOne(u);
+            return true;
         }
         public string HashPassword(string password)
         {

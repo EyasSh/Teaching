@@ -11,6 +11,18 @@ builder.Services.Configure<DBSettings>(
     ) ;
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CourseService>();
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 //add the courses singleton here too
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Use CORS middleware
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

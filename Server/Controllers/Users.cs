@@ -38,14 +38,14 @@ namespace Server.Controllers
         public async  Task<IActionResult> Login([Bind("Id,Email,Password")] User u)
         {
             //await db or other method calls here
-           User res =   await _userService.GetUserByEmailandPass(u.Email,u.Password);
-            if (res!=null)
-            {
-                var token = GenerateJwtToken(res);
-                return Ok(new{token});
-            }
-            return NotFound();
-            
+           //User res =   await _userService.GetUserByEmailandPass(u.Email,u.Password);
+            // if (res!=null)
+            // {
+            //     var token = GenerateJwtToken(res);
+            //     return Ok(new{token});
+            // }
+            // return NotFound();
+            return Ok();
         }
 
         

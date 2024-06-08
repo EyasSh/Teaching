@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Runtime.InteropServices;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Server.Models;
 
@@ -17,7 +18,15 @@ namespace Server.Services
             var userClient = new MongoClient(settings.Value.ConnectionString);
             var Database = userClient.GetDatabase(settings.Value.DatabaseName);
             _courses = Database.GetCollection<Course>(settings.Value.CoursesCollectionName);
-            _usercourse = Database.GetCollection<UserCourse>(settings.Value.UserCoursesCollectionName);
+            
+            try{
+                _usercourse = Database.GetCollection<UserCourse>(settings.Value.UserCourseCollectionName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine ("Fail here");
+            }
+            
         }
         /// <summary>
         /// Gets all courses in the collection

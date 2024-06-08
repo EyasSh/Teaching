@@ -9,7 +9,13 @@ function Input(props) {
     ];
     const handleChange=(e) => {
         if(props.type=='date'){
-            props.action(new Date(e.target.value))
+            const dateString = e.target.value;
+            const dateParts = dateString.split('-');
+            const year = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1; // Months are 0-based in JavaScript
+            const day = parseInt(dateParts[2]);
+            const newDate = new Date(year, month, day);
+            props.action(newDate)
             return
         }
         props.action(e.target.value);

@@ -25,11 +25,13 @@ class UserHandler {
    static #Checker(email,password,dateOfBirth)
    {
         const eReg=
-        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+        new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
         let validateEFormat= eReg.test(email)
+        
         // eslint-disable-next-line no-useless-escape
-        const passRegex = "/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/";
+        const passRegex = new RegExp("^(?=.*\\d)(?=.*[a-zA-Z]).{8,}$");
         let validPassFormat= passRegex.test(password)
+        
         // Calculate age based on dateOfBirth
         const today = new Date();
         const birthYear = dateOfBirth.getFullYear();
@@ -37,6 +39,7 @@ class UserHandler {
 
         // Check if user is 16 or older
         const isOldEnough = age >= 16;
+       
 
     return validateEFormat && validPassFormat && isOldEnough;
    }
@@ -64,29 +67,34 @@ class UserHandler {
         1.Email may not be in the correct format
         2.Password must be 8 charecters long and include numbers
         3. date of birth ahead of current time or user must be 16 and older`
+        alert(`${email}\n${password}\n${dob}`)
         let val=UserHandler.#Checker(email,password,dob)
+        // Convert date of birth to ISO string
+        const isoDob = dob.toISOString();
         let options={
             "method":"POST",
-            "Content-type":"text/json",
-            "body":{name,email,password,dob}
+            "headers": {
+                "Content-type": "application/json"
+            },
+            "body":JSON.stringify({name,email,password,dob:isoDob})
         }
         if(val)
         {
             let res = await fetch(UserHandler.Srout,options);
-            if(res.ok())
+            if(res.ok)
             {
                 alert(`User added successfully`)
-                return
+                return res
             }
             else
             {
                 alert("User already exists")
-                return
+                return undefined
             }
         }
         else{
             alert(errMsg)
-            return
+            return undefined
         }
         
     }
