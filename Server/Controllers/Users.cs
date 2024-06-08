@@ -62,6 +62,7 @@ namespace Server.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("Id,Name,Email,Password,Birthday")]User user)
         {
+            Console.WriteLine(user?.Birthday);
             var res = await _userService.CreateUser(user); 
             if(res)
             {
