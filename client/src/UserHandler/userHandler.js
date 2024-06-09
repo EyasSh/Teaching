@@ -6,7 +6,8 @@ class UserHandler {
         Name:'',
         Email:'',
         Password:'',
-        BirthDay:undefined,
+        Birthday:new Date(),
+        BirthdayString:''
    };
    static Lroute="http://localhost:5126/api/users/"
    static Srout="http://localhost:5126/api/users/signup"
@@ -61,22 +62,23 @@ class UserHandler {
         localStorage.setItem(token)
         return token
     }
-    static async Signup(name,email,password,dob){
+    static async Signup(name,email,password,BirthDay){
         const errMsg =
         `Check the follwing errors
         1.Email may not be in the correct format
         2.Password must be 8 charecters long and include numbers
         3. date of birth ahead of current time or user must be 16 and older`
-        alert(`${email}\n${password}\n${dob}`)
-        let val=UserHandler.#Checker(email,password,dob)
+        alert(`${email}\n${password}\n${BirthDay}`)
         // Convert date of birth to ISO string
-        const isoDob = dob.toISOString();
+        const BirthdayString = BirthDay.toISOString();
+        let val=UserHandler.#Checker(email,password,BirthDay)
+        
         let options={
             "method":"POST",
             "headers": {
                 "Content-type": "application/json"
             },
-            "body":JSON.stringify({name,email,password,dob:isoDob})
+            "body":JSON.stringify({name,email,password,BirthdayString})
         }
         if(val)
         {
@@ -85,6 +87,10 @@ class UserHandler {
             {
                 alert(`User added successfully`)
                 return res
+            }
+            else if(!res.ok)
+            {
+                    alert("an error occured")
             }
             else
             {

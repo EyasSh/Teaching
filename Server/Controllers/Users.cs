@@ -60,9 +60,11 @@ namespace Server.Controllers
         
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email,Password,Birthday")]User user)
+        //TODO: Fix the user birthday setter
+        public async Task<IActionResult> Create([Bind("Id,Name,Email,Password,BirthdayString")]User user)
         {
-            Console.WriteLine(user?.Birthday);
+            Console.WriteLine($"in {nameof(Create)}");
+            Console.WriteLine(user.BirthdayString);
             var res = await _userService.CreateUser(user); 
             if(res)
             {

@@ -14,7 +14,7 @@ function Signup(props) {
     let handleSup = async ()=>{
         try{
             console.log(`Signup called with name: ${name}, email: ${email}, password: ${password}, dob: ${dob}`);
-            let res = await UserHandler.Signup(name,email,password,dob);
+            await UserHandler.Signup(name,email,password,dob);
         }
         catch(e){
             alert(e.Message)
