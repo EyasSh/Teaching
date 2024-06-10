@@ -70,7 +70,9 @@ class UserHandler {
         3. date of birth ahead of current time or user must be 16 and older`
         alert(`${email}\n${password}\n${BirthDay}`)
         // Convert date of birth to ISO string
-        const BirthdayString = BirthDay.toISOString();
+        const BirthDayUTC = new Date(Date.UTC(BirthDay.getFullYear(), BirthDay.getMonth(), BirthDay.getDate()));
+        const BirthdayString = BirthDayUTC.toISOString();
+        this.#User.Birthday=BirthDay;
         let val=UserHandler.#Checker(email,password,BirthDay)
         
         let options={

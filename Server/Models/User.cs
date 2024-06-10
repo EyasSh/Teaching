@@ -20,14 +20,32 @@ namespace Server.Models
         ErrorMessage = "Password must be at least 8 characters and contain at least one letter and one number")]
         public  string Password { get; set; } = "LobsterBeef997";
         [Required]
-        public BsonDateTime Birthday { get; private set; } // Make setter private
+        public DateTime Birthday { get; private set; } // Make setter private
 
-       public string BirthdayString
-    {   
-       
-        get { return BirthdayString; }
-
-    }
+        [BsonIgnore]
+        public string BirthdayString
+        {   
+            set
+            {
+                Console.WriteLine(value);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    try
+                    {
+                        Console.WriteLine($"In the try of {nameof(BirthdayString)}");
+                        DateTime d = DateTime.Parse(value, null, DateTimeStyles.RoundtripKind);
+                        Console.WriteLine(d.ToString());
+                        Birthday = DateTime.SpecifyKind(d, DateTimeKind.Utc); 
+                        System.Console.WriteLine($"Birthday is :{d}");
+                    }
+                    catch
+                    {
+                        Console.WriteLine("An Error Occurred");
+                    }
+                }
+            }
+            get { return Birthday.ToString("o"); } // Return ISO 8601 string
+        }
         
         public User()
         {
