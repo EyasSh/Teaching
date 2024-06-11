@@ -27,16 +27,16 @@ namespace Server.Models
         {   
             set
             {
-                Console.WriteLine(value);
+                
                 if (!string.IsNullOrEmpty(value))
                 {
                     try
                     {
-                        Console.WriteLine($"In the try of {nameof(BirthdayString)}");
+                        
                         DateTime d = DateTime.Parse(value, null, DateTimeStyles.RoundtripKind);
                         Console.WriteLine(d.ToString());
                         Birthday = DateTime.SpecifyKind(d, DateTimeKind.Utc); 
-                        System.Console.WriteLine($"Birthday is :{d}");
+                       
                     }
                     catch
                     {
