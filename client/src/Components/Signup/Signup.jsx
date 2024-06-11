@@ -13,7 +13,7 @@ function Signup(props) {
     const [dob,setDob] = useState(null)
     let handleSup = async ()=>{
         try{
-            console.log(`Signup called with name: ${name}, email: ${email}, password: ${password}, dob: ${dob}`);
+            
             await UserHandler.Signup(name,email,password,dob);
         }
         catch(e){
