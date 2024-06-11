@@ -35,17 +35,15 @@ namespace Server.Controllers
         
         [HttpGet]
         // GET: Users
-        public async  Task<IActionResult> Login([Bind("Id,Email,Password")] User u)
+        public async  Task<IActionResult> Login(string email,string password)
         {
-            //await db or other method calls here
-           //User res =   await _userService.GetUserByEmailandPass(u.Email,u.Password);
-            // if (res!=null)
-            // {
-            //     var token = GenerateJwtToken(res);
-            //     return Ok(new{token});
-            // }
-            // return NotFound();
-            return Ok();
+           var userLogging = await _userService.Login(email,password);
+           if (userLogging == null)
+           {
+                return BadRequest("The User Does not exist or wrong credentials");
+           }
+           var token = GenerateJwtToken(userLogging);
+            return Ok(token);
         }
 
         
@@ -60,12 +58,13 @@ namespace Server.Controllers
         
         [HttpPost("signup")]
         [AllowAnonymous]
-        //TODO: Fix the user birthday setter
+        //TODO: Fix the user birthday setter (Done)
+        
         public async Task<IActionResult> Create([Bind("Id,Name,Email,Password,BirthdayString")]User user)
         {
            
             var res = await _userService.CreateUser(user); 
-            if(res)
+            if(res!=null)
             {
                 return Ok();
             }

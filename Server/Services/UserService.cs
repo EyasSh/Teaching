@@ -3,14 +3,15 @@ using Server.Models;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Collections.Generic;
 
 
 namespace Server.Services
 {
     interface IUserService
     {
-        Task<User> GetUserByEmail(string email);
-        Task<bool> CreateUser(User u);
+        Task<User?> GetUserByEmail(string email);
+        Task<User?> CreateUser(User u);
     }
     public class UserService: IUserService
     {
@@ -22,33 +23,53 @@ namespace Server.Services
             var Database = userClient.GetDatabase(settings.Value.DatabaseName);
             _usersCollection = Database.GetCollection<User>(settings.Value.UsersCollectionName);
         }
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email)
         {
             //use appropriate checks for password and email validation
-           var filter = Builders<User>.Filter.Eq(u => u.Email, email);
+           var filter = Builders<User>.Filter.Eq(u => u.Email,email);
             return await _usersCollection.Find(filter).FirstOrDefaultAsync();
         }
        
-        public async Task<bool> CreateUser(User u)
+       public async Task<User?> CreateUser(User user)
         {
-            
-            // Check if a user with the same email already exists
-             var existingUser = await GetUserByEmail(u.Email);
-    
-             // If an existing user with the same email is found, return false
+            // Before creating, check if the user already exists by email
+            var existingUser = await GetUserByEmail(user.Email);
             if (existingUser != null)
             {
-                return false;
+                throw new InvalidOperationException("User already exists with this email.");
             }
 
-            // If no existing user is found, proceed to create the new user
-            u.Password = HashPassword(u.Password);
-            _usersCollection.InsertOne(u);
-            return true;
+            await _usersCollection.InsertOneAsync(user);
+            return user;
+        }
+
+        public async Task<User?> Login(string email,string password)
+        {
+            var filter = Builders<User>.Filter.Eq(u=>u.Email, email);
+            var users = await _usersCollection.Find(filter).ToListAsync();
+            if (users.Count >1|| users.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                if(VerifyPassword(password,users[0].Password))
+                {
+                    return users[0];
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
         public string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+        public bool VerifyPassword(string plain,string hashed)
+        {
+           return BCrypt.Net.BCrypt.EnhancedVerify(plain,hashed);
         }
 
     }
