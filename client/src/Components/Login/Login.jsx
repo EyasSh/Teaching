@@ -3,12 +3,21 @@ import './Login.css'
 import Logo from '../Logo/Logo';
 import Input from '../Inputs/Input';
 import Button from '../Button/Button'
+import UserHandler from '../../UserHandler/userHandler';
 
 function Login(props) {
     const [email,setEmail] = useState('');
     const [password,setPassword]=useState('');
     const handleForm= ()=>{
-        
+        try{
+            let Email = email
+            let Password=password
+            let res = UserHandler.Login(Email,Password)
+            console.log(res)
+        }
+        catch{
+            alert("Error occurred in login catch")
+        }
     }
     return (
         <div className='container'>

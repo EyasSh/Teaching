@@ -13,7 +13,7 @@ namespace Server.Services
         Task<User?> GetUserByEmail(string email);
         Task<User?> CreateUser(User u);
     }
-    public class UserService: IUserService
+    public class UserService:ControllerBase, IUserService
     {
         private readonly IMongoCollection<User> _usersCollection;
 
@@ -36,9 +36,9 @@ namespace Server.Services
             var existingUser = await GetUserByEmail(user.Email);
             if (existingUser != null)
             {
-                throw new InvalidOperationException("User already exists with this email.");
+                return null;
             }
-
+           user.Password= HashPassword(user.Password);
             await _usersCollection.InsertOneAsync(user);
             return user;
         }
@@ -46,22 +46,26 @@ namespace Server.Services
         public async Task<User?> Login(string email,string password)
         {
             var filter = Builders<User>.Filter.Eq(u=>u.Email, email);
-            var users = await _usersCollection.Find(filter).ToListAsync();
-            if (users.Count >1|| users.Count == 0)
+            var user = await _usersCollection.Find(filter).FirstOrDefaultAsync();
+            if (user != null)
             {
-                return null;
-            }
-            else
-            {
-                if(VerifyPassword(password,users[0].Password))
+                bool isVerified = VerifyPassword(password,user.Password);
+                if (!isVerified)
                 {
-                    return users[0];
+                    Console.WriteLine("Password is not verified returning null");
+                    return null;
                 }
                 else
                 {
-                    return null;
+                    return user;
                 }
             }
+            else
+            {
+                Console.WriteLine("User was not found");
+                return null;
+            }
+            
         }
         public string HashPassword(string password)
         {
@@ -69,7 +73,7 @@ namespace Server.Services
         }
         public bool VerifyPassword(string plain,string hashed)
         {
-           return BCrypt.Net.BCrypt.EnhancedVerify(plain,hashed);
+           return BCrypt.Net.BCrypt.Verify(plain,hashed);
         }
 
     }

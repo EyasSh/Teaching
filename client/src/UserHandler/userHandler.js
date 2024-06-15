@@ -45,42 +45,68 @@ class UserHandler {
     return validateEFormat && validPassFormat && isOldEnough;
    }
    
-    static async Login(email,password) {
-        let token='';
-        UserHandler.#User.Email=email
-        UserHandler.#User.Password=password
-        let options= {
-            "method":"GET",
-            "Content-type":"text/json",
-            "body":UserHandler.getUserData(),
+   static async Login(Email, Password) 
+   {
+        let token = '';
+        let user = undefined;
+
+        const options = {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ Email, Password }) // Correctly format the body
+        };
+        alert(`${Email}\n${Password}`)
+        try {
+            let res = await fetch(UserHandler.Lroute, options);
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                alert(errorData.Message || "An error occurred during login. #1");
+                return;
+            }   
+
+        // Extract token from headers
+            token = res.headers.get('Authorization')?.split(' ')[1];
+            localStorage.setItem('token', token);
+
+            // Extract user data from body
+            const responseData = await res.json();
+            user = responseData.User;
+
+            // Populate UserHandler's user data
+            UserHandler.#User = user;
+
+            return token;
+        } 
+        catch (error) 
+        {
+            console.error('Error during login:', error);
+            alert("An error occurred while logging in #2.");
         }
-        let res = await fetch(UserHandler.Lroute,options);
-        if(!res){
-            return""
-        }
-        token = res.body.token
-        localStorage.setItem(token)
-        return token
-    }
-    static async Signup(name,email,password,BirthDay){
+}
+
+
+    static async Signup(Name,Email,Password,BirthDay){
         const errMsg =
         `Check the follwing errors
         1.Email may not be in the correct format
         2.Password must be 8 charecters long and include numbers
         3. date of birth ahead of current time or user must be 16 and older`
-        alert(`${email}\n${password}\n${BirthDay}`)
+        alert(`${Email}\n${Password}\n${BirthDay}`)
         // Convert date of birth to ISO string
         const BirthDayUTC = new Date(Date.UTC(BirthDay.getFullYear(), BirthDay.getMonth(), BirthDay.getDate()));
         const BirthdayString = BirthDayUTC.toISOString();
         this.#User.Birthday=BirthDay;
-        let val=UserHandler.#Checker(email,password,BirthDay)
+        let val=UserHandler.#Checker(Email,Password,BirthDay)
         
         let options={
             "method":"POST",
             "headers": {
                 "Content-type": "application/json"
             },
-            "body":JSON.stringify({name,email,password,BirthdayString})
+            "body":JSON.stringify({Name,Email,Password,BirthdayString})
         }
         if(val)
         {
@@ -92,7 +118,7 @@ class UserHandler {
             }
             else if(!res.ok)
             {
-                    alert("an error occured")
+                    alert("an error occurred")
             }
             else
             {
@@ -102,7 +128,7 @@ class UserHandler {
         }
         else{
             alert(errMsg)
-            return undefined
+            return ;
         }
         
     }

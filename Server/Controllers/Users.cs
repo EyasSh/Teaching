@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using MongoDB.Bson;
+using Server.DTO;
 
 namespace Server.Controllers
 {
@@ -33,18 +34,31 @@ namespace Server.Controllers
             _configuration = configuration;
         }
         
-        [HttpGet]
+        [HttpPost]
         // GET: Users
-        public async  Task<IActionResult> Login(string email,string password)
+    public async Task<IActionResult> Login([FromBody] UserDTO request)
+    {
+        System.Console.WriteLine($"{request.Email}\n{request.Password}");
+        if (request == null || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
-           var userLogging = await _userService.Login(email,password);
-           if (userLogging == null)
-           {
-                return BadRequest("The User Does not exist or wrong credentials");
-           }
-           var token = GenerateJwtToken(userLogging);
-            return Ok(token);
+            Console.WriteLine("In null check");
+            return BadRequest(new { Message = "Email and password are required." });
         }
+
+        var userLogging = await _userService.Login(request.Email, request.Password);
+        if (userLogging == null)
+        {
+            Console.WriteLine("in userLogging null check");
+            return BadRequest(new { Message = "Invalid email or password. or user does not exist" });
+        }
+
+        var token = GenerateJwtToken(userLogging);
+        HttpContext.Response.Headers["Authorization"] = $"Bearer {token}";
+
+        return Ok(new { User = userLogging });
+    }
+
+
 
         
         [HttpGet("Home")]
@@ -60,16 +74,49 @@ namespace Server.Controllers
         [AllowAnonymous]
         //TODO: Fix the user birthday setter (Done)
         
-        public async Task<IActionResult> Create([Bind("Id,Name,Email,Password,BirthdayString")]User user)
+    public async Task<IActionResult> Create([FromBody] UserDTO userDto)
+    {
+        try
         {
-           
-            var res = await _userService.CreateUser(user); 
-            if(res!=null)
+            // Validate required fields
+            if (userDto == null || string.IsNullOrEmpty(userDto.Name) || string.IsNullOrEmpty(userDto.Email) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.BirthdayString))
+            {
+                return BadRequest("Name, Email, Password, and BirthdayString are required.");
+            }
+
+            // Parse birthday string to DateTime (example assumes format "yyyy-MM-dd")
+            
+
+            // Create a User object to pass to the service layer
+            var user = new User
+            {
+                Name = userDto.Name,
+                Email = userDto.Email,
+                Password = userDto.Password,
+                BirthdayString = userDto.BirthdayString // Assuming User model has a DateTime property for Birthday
+            };
+
+            // Call the user service to create the user
+            var result = await _userService.CreateUser(user);
+
+            if (result != null)
             {
                 return Ok();
             }
-            return Conflict();
+            else
+            {
+                return Conflict();
+            }
         }
+        catch (JsonException e)
+        {
+            return BadRequest(new { Message = $"Invalid data provided in JSON\nMessage: {e.Message}\nStack Trace\n{e.StackTrace}" });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { Message = $"An exception occurred with the below message\n{e.Message}\nStack Trace:\n{e.StackTrace}" });
+        }
+    }
 
         // POST: Users/Create
        
@@ -111,7 +158,13 @@ namespace Server.Controllers
         }
         private string GenerateJwtToken(User user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
+            if (user == null)
+            {
+                return "";
+            }
+            else
+            {
+                 var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -130,6 +183,8 @@ namespace Server.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+            }
+           
         }
         //// GET: Users/Delete/5
         //public ActionResult Delete(int id)
