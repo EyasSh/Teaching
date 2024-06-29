@@ -1,15 +1,18 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 namespace Middleware.User.Security
 {
   
-
-    public class UserSecurity:ControllerBase
+interface IAsyncMiddleware
+{
+    public Task InvokeAsync(HttpContext context);
+}
+    public class UserSecurity:IAsyncMiddleware
     {
        private readonly RequestDelegate _next;
-        public UserSecurity(RequestDelegate rd)
+        public UserSecurity()
         {
-          _next = rd;
+        
         }
         public async Task InvokeAsync(HttpContext context)
         {

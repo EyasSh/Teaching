@@ -13,7 +13,7 @@ builder.Services.Configure<DBSettings>(
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CourseService>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<UserSecurity>();
+builder.Services.AddTransient<UserSecurity>();
 // Add CORS services
 builder.Services.AddCors(options =>
 {
