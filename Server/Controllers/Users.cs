@@ -27,7 +27,8 @@ namespace Server.Controllers
         private readonly UserService _userService;
         private readonly CourseService _courseService;
         private readonly IConfiguration _configuration;
-        public Users(UserService userService,CourseService courseService, IConfiguration configuration)
+        public Users
+        (UserService userService,CourseService courseService, IConfiguration configuration)
         {
             _userService = userService;
             _courseService = courseService;

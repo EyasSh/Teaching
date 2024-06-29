@@ -1,3 +1,4 @@
+using Middleware.User.Security;
 using Server.Models;
 using Server.Services;
 
@@ -11,6 +12,8 @@ builder.Services.Configure<DBSettings>(
     ) ;
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CourseService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserSecurity>();
 // Add CORS services
 builder.Services.AddCors(options =>
 {
